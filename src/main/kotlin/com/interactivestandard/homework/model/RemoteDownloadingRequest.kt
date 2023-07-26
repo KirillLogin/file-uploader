@@ -3,16 +3,13 @@ package com.interactivestandard.homework.model
 import kotlin.random.Random
 
 class RemoteDownloadingRequest(
-    val width: Pixel,
-    val height: Pixel
+    val width: Int,
+    val height: Int
 ) {
     companion object {
-        private const val min = 10
-        private const val max = 5000
-
         fun generate(): RemoteDownloadingRequest = RemoteDownloadingRequest(
-            height = Random.nextInt(min, max),
-            width = Random.nextInt(min, max)
+            height = Random.nextInt(MIN_IMAGE_SIZE_PROPERTY, MAX_IMAGE_SIZE_PROPERTY),
+            width = Random.nextInt(MIN_IMAGE_SIZE_PROPERTY, MAX_IMAGE_SIZE_PROPERTY)
         )
     }
 }

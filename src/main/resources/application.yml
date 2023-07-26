@@ -6,3 +6,5 @@ spring:
 
 processing:
   parallelism: 5
+  cron: "0 0/5 * ? * *"
+  max-file-size-kb: 500

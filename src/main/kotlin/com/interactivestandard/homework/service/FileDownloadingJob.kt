@@ -1,5 +1,6 @@
 package com.interactivestandard.homework.service
 
+import com.interactivestandard.homework.model.BYTES_IN_KB
 import com.interactivestandard.homework.model.RemoteDownloadingRequest
 import com.interactivestandard.homework.repository.db.FilesRepository
 import com.interactivestandard.homework.repository.db.StatsRepository
@@ -20,13 +21,12 @@ class FileDownloadingJob(
     private val fileDownloadingRepo: DownloadingRepository,
     private val fileSavingRepo: FilesRepository,
     private val statsRepository: StatsRepository,
-    @Value("\${processing.parallelism:5}") private val parallelism: Int = 5
+    @Value("\${processing.parallelism:5}") private val parallelism: Int
 ) {
 
     companion object {
         private val LOG = LoggerFactory.getLogger(this::class.java)
         private val SCOPE = CoroutineScope(Dispatchers.IO + SupervisorJob())
-        private val BYTES_MULTIPLIER = 1024
 
         //every 5 min
         private const val DEFAULT_CRON_EXPRESSION = "0 0/5 * ? * *"
@@ -52,7 +52,7 @@ class FileDownloadingJob(
             .filter { it > 0 }
             .run {
                 val totalBytes = sum()
-                LOG.info("$size files downloaded with total size ${totalBytes/BYTES_MULTIPLIER} Kb")
+                LOG.info("$size files downloaded with total size ${totalBytes/BYTES_IN_KB} Kb")
                 statsRepository.update(countIncrement = size, sizeIncrement = totalBytes)
             }
     }
